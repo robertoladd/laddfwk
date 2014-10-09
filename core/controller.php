@@ -1,0 +1,6 @@
+<?
+namespace Core;
+
+class Controller{
+    
+}
