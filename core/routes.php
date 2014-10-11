@@ -15,14 +15,14 @@ class Routes{
     
     public static function init(){
         if(php_sapi_name() !== 'cli'){
-            self::$_interface = 'cli';
+            self::$_interface = 'other';
             self::loadRoutes();
         }
-        self::$_interface = 'other';
+        self::$_interface = 'cli';
     }
     
     public static function dispatch(){
-        if(self::$_interface = 'cli'){
+        if(self::$_interface == 'cli'){
            return self::dispatchCLI(); 
         }
     }
@@ -31,12 +31,27 @@ class Routes{
         global $argv;
         if(!ini_get('register_argc_argv')) throw new laddException('Disabled register_argc_argv ini parameter.', 0);
         
-        $controller_name = '\\Controller\\'.ucfirst(strtolower($argv[1]));
-        $method_name = $argv[2];
+        $cmd_flags = array();
+        foreach($argv as $k => $v){
+            if($k==0)continue;
+            
+            if(stripos($v, '--')===0){
+                if($v=='--help') $controller_args[0]='help';
+                $flag=explode('=',$v);
+                if(!isset($flag[1]))$flag[1] = true;
+                $cmd_flags[str_replace('--', '', $flag[0])]=trim($flag[1]);
+            }else{
+                $controller_args[]=$v;
+            }
+        }
+        
+        $controller_name = '\\Controller\\'.ucfirst(strtolower($controller_args[0]));
+        
+        $method_name = $controller_args[1];
         $method_args = array();
         
-        foreach($argv as $k => $v){
-            if($k>2){
+        foreach($controller_args as $k => $v){
+            if($k>1){
                 $method_args[]=$v;
             }
         }
@@ -44,6 +59,7 @@ class Routes{
         if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.", 0);
         
         $controller = new $controller_name;
+        Application::setCLIFlags($cmd_flags);
         
         if(!method_exists($controller, $method_name))  throw new laddException("Unknown method {$method_name}.", 0);
         

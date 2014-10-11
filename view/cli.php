@@ -1,0 +1,2 @@
+<?
+echo "\nResult: $output\n";
