@@ -5,7 +5,7 @@ class Task1 extends \Core\Model{
     
     protected static $_disable_persistance=true;
     
-    public static function multiples_sum($threshold, $ints = array()){
+    public static function multiplesSum($threshold, $ints = array()){
         
         \Core\Log::info("Start searching for given numbers multiples sum.");
         
@@ -41,7 +41,7 @@ class Task1 extends \Core\Model{
     
     
     
-    public static function large_multiples_sum($threshold, $ints = array(), $sum=0){
+    public static function largeMultiplesSum($threshold, $ints = array(), $sum=0){
         static $_start_from_i;
         \Core\Log::info("Start searching for numbers multiples sum.");
         
@@ -115,9 +115,64 @@ class Task1 extends \Core\Model{
     
     
     
-    function sumed_power($base, $exp){
-        if(!is_int($base) || !is_int($exp) || $base<0 || $exp<0) throw new laddException('Both numbers must be natural numbers');
+    static function powerA($base, $exp){
+        \Core\Log::info("Called Power A with parameters: $base, $exp");
+        if(!is_int($base) || !is_int($exp) || $base<0 || $exp<0) throw new \Core\laddException('Both numbers must be natural numbers');
         
+        //this is the simplest way. :)
+        return pow($base, $exp);
+    }
+    
+    static function powerB($base, $exp){
+        if(!is_int($base) || !is_int($exp) || $base<0 || $exp<0) throw new \Core\laddException('Both numbers must be natural numbers');
+        $pow = $base;
+        for($i=1;$i<$exp;$i++){
+            \Core\log::info("Processing exp loop {$i}");
+            $pow = self::manualMultiplication($pow, $base);
+            \Core\log::info("Current power {$pow}");
+        }
+        return $pow;
+    }
+    
+    static function manualMultiplication($x, $y){
+        if(!is_numeric($x) || !is_numeric($y)) throw new \Core\laddException('Both parameters must be numbers');
+        $sum = 0;
+        for($i=1;$i<=$y;$i++){
+            \Core\log::info("Adding {$x} to {$sum}");
+            $sum += $x;
+        }
+        return $sum;
+    }
+    
+    static function fibonacciRec($max, $f_nums=array(1), $curr=1){
+        if(!is_int($max)) throw new \Core\laddException('Maximum limit must be an integer');
+        \Core\log::info("Current num {$curr}");
         
+        if($curr>=$max) return $f_nums;
+        
+        //sum previous number with the current one
+        $next= (max($f_nums) + $curr);
+        
+        //add current number to sequence
+        $f_nums[]=$curr;
+        
+        \Core\log::info("Next num {$next}");
+        $f_nums = self::fibonacciRec($max, $f_nums, $next);
+        
+        return $f_nums;
+    }
+    
+    static function fibonacci($max){
+        if(!is_int($max)) throw new \Core\laddException('Maximum limit must be an integer');
+        $f_nums=array();
+        $j = 1;
+        for($i=1;$i<$max;$i=$i+max($f_nums) ){
+            
+            \Core\log::info("Current num {$i}");
+            \Core\log::info("Prev num ".$j);
+            $f_nums[]=$j;
+            $j = $i;
+        }
+        return $f_nums;
     }
 }
