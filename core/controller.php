@@ -21,7 +21,7 @@ namespace Core;
 
 class Controller{
     protected function display($view, $params=array()){
-        
+        if(is_string($view)) echo $view;
         echo View::get($view, $params);
     }
 }

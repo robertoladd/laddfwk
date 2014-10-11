@@ -44,5 +44,15 @@ class View {
             }
                 
         }
+        
+        $view_file = $CONFIG['path'].'/view/'.$view.'.php';
+        if(!file_exists($view_file)){
+            throw new laddException("Undefined vew {$view}.");
+        }
+        $output = $params[0];
+        ob_start();
+        include($view_file);
+
+        return ob_get_clean();
     }
 }
