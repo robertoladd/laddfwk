@@ -32,7 +32,6 @@ class Test extends \Core\Controller{
 
 
 ```Shell
-namespace Controller;
 
 $php /var/www/laddfwk/cli.php test helloworld John Doe
 
