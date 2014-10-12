@@ -183,13 +183,16 @@ class Task1 extends \Core\Model{
         if(!is_int($max)) throw new \Core\laddException('Maximum limit must be an integer');
         $f_nums=array();
         $j = 1;
-        for($i=1;$i<$max;$i=$i+max($f_nums) ){
+        for($i=1;$i<=$max;$i=$i+max($f_nums) ){
             
             \Core\log::info("Current num {$i}");
             \Core\log::info("Prev num ".$j);
             $f_nums[]=$j;
             $j = $i;
         }
+        
+        $f_nums[]=$j;
+        
         return $f_nums;
     }
 }
