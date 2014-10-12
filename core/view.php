@@ -48,7 +48,7 @@ class View {
         
         $view_file = $CONFIG['path'].'/view/'.$view.'.php';
         if(!file_exists($view_file)){
-            throw new laddException("Undefined vew {$view}.");
+            throw new laddException("Undefined view {$view}.");
         }
         extract($params);
         ob_start();

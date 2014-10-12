@@ -22,19 +22,24 @@ class Response{
     
     protected $status_code;
     protected $content;
+    protected $content_type;
+    
     protected static $status_msgs = array(404=>"Not Found",200=>"OK");
 
 
 
-    public function __construct($content, $status_code=200){
+    public function __construct($content, $status_code=200, $content_type='text/html'){
         if(!is_int($status_code)) throw new laddException("Status code $status_code unaccepted type (".gettype($status_code).")");
         
         $this->status_code = $status_code;
+        $this->content_type = $content_type;
         $this->content = $content;
+        
     }
     
     public function respond(){
         header($_SERVER["SERVER_PROTOCOL"]." {$this->status_code} ".self::$status_msgs[$this->status_code]);
+        header('Content-Type: '.$this->content_type);
         
         echo $this->content;
         exit;

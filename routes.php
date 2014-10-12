@@ -26,3 +26,9 @@
 \Core\Routes::add('/^\/welcome(?:\/(.*?))*$/i', 'home', 'welcome', \Core\Routes::ANY);
 
 \Core\Routes::add('/^\/$/i', 'home', 'welcome', \Core\Routes::ANY);
+
+\Core\Routes::add('/^\/address(?:\/([0-9]*?)(:?\.(json)))*$/i', 'task2', 'address', \Core\Routes::GET);
+\Core\Routes::add('/^\/address(?:\/([0-9]*?))*$/i', 'task2', 'address', \Core\Routes::GET);
+
+\Core\Routes::add('/^\/addresses(:?\.(json))*$/i', 'task2', 'addresses', \Core\Routes::GET);
+\Core\Routes::add('/^\/addresses(?:\/)*$/i', 'task2', 'addresses', \Core\Routes::GET);

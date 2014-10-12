@@ -21,17 +21,17 @@
 namespace Core;
 
 class Controller{
-    protected function display($view, $params=array(), $status_code=200){
+    protected function display($view, $params=array(), $status_code=200, $content_type = ''){
         
         if(!is_int($status_code)) throw new laddException("Status code $status_code unaccepted type (".gettype($status_code).")");
         
-        if($view=='raw') return new Response($view, $status_code);
+        if($view=='raw') return new Response((string) $params, $status_code, $content_type);
         
-        return  new Response(View::get($view, $params), $status_code);
+        return  new Response(View::get($view, $params), $status_code, $content_type);
     }
     
     
-    protected function status404($message){
-        return $this->display('404', array($message), 404);
+    protected function status404($message='Not Found'){
+        return $this->display('raw', $message, 404);
     }
 }
