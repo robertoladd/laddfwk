@@ -1,6 +1,7 @@
 <?
 
-//    Copyright (C) 2014  Roberto Ladd
+//    Copyright (C) 2014  Roberto Ladd 
+//    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -15,12 +16,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 namespace Controller;
 
-class Test extends \Core\Controller{
+class Home extends \Core\Controller{
     
-    public function test($one, $two, $three){
-        echo "\n$one $two $three\n";
+    public function welcome($name=''){
+        return $this->display('home', array('name'=>$name));
     }
 }

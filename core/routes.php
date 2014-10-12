@@ -1,6 +1,7 @@
 <?
 
 //    Copyright (C) 2014  Roberto Ladd
+//    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,6 +20,12 @@
 namespace Core;
 
 class Routes{
+    
+    const ANY = 0;
+    const GET = 1;
+    const POST = 2;
+    const PUT = 3;
+    const DELETE = 4;
     
     protected static $_interface;
     
@@ -41,6 +48,74 @@ class Routes{
         
         if(self::$_interface == 'cli'){
            return self::dispatchCLI(); 
+        }
+        
+        switch($_SERVER['REQUEST_METHOD']){
+            case 'GET':
+                $req_method = self::GET;
+            break;
+            case 'POST':
+                $req_method = self::POST;
+                if(isset($_POST['fake_method'])){//This is to allow browsers to use RESFULL PUT and DELETE non supported methods.
+                    switch($_POST['fake_method']){
+                        case 'PUT':
+                            $req_method = self::PUT;
+                        break;
+                        case 'DELETE':
+                            $req_method = self::DELETE;
+                        break;
+                    }
+                }
+            break;
+            case 'PUT':
+                $req_method = self::PUT;
+            break;
+            case 'DELETE':
+                $req_method = self::DELETE;
+            break;
+        }
+        
+        
+        
+        self::dispatchRoute($req_method);
+        
+        self::dispatchRoute(self::ANY);
+        
+        $response = new Response('Not Found', 404);
+        
+        $response->respond();
+    }
+    
+    protected static function dispatchRoute($req_method){
+        global $CONFIG;
+        
+        if(!is_array(self::$_routes[$req_method])) return false;
+        
+        $wwwroot_parts= parse_url($CONFIG['wwwroot']);
+        
+        $rel_url = str_replace($wwwroot_parts['path'], '', $_SERVER['REQUEST_URI']);
+        
+        foreach(self::$_routes[$req_method] as $route){
+            $matches = array();
+            if(preg_match($route['path_pattern'], $rel_url, $matches)){
+                
+                Log::info("Route pattern matches: ".print_r($matches, true));
+                
+                $controller_name = "\\Controller\\".$route['controller'];
+                
+                if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.", 0);
+        
+                $controller = new $controller_name;
+
+                if(!method_exists($controller, $route['controller_method']))  throw new laddException("Unknown method {$route['controller_method']}.", 0);
+                
+                unset($matches[0]);
+                
+                $response = call_user_func_array(array($controller,$route['controller_method']),$matches);
+        
+                if(get_class($response)!= 'Core\\Response') throw new laddException("Unknown response type. Expected Response class object.");
+                $response->respond();
+            }
         }
     }
     
@@ -87,11 +162,11 @@ class Routes{
     }
     
     public static function loadRoutes(){
-        
-        
+        global $CONFIG;
+        include_once($CONFIG['path'].'/routes.php');
     }
     
-    public static function add($path, $controller, $controller_method, $http_method = 'ALL'){
-        
+    public static function add($path_pattern, $controller, $controller_method, $http_method = \Core\Routes::ANY){
+        self::$_routes[$http_method][] = array('path_pattern'=>$path_pattern, 'controller'=> $controller, 'controller_method'=> $controller_method);
     }
 }

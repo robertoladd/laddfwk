@@ -1,6 +1,7 @@
 <?
 
 //    Copyright (C) 2014  Roberto Ladd
+//    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -49,7 +50,7 @@ class View {
         if(!file_exists($view_file)){
             throw new laddException("Undefined vew {$view}.");
         }
-        $output = $params[0];
+        extract($params);
         ob_start();
         include($view_file);
 

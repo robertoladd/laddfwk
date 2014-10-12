@@ -1,6 +1,7 @@
 <?
 
 //    Copyright (C) 2014  Roberto Ladd
+//    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -22,6 +23,8 @@ namespace Core;
 class Log{
     
     public static function __callStatic($method,$arguments) {
+        global $CONFIG;
+        
         if(method_exists('\\Core\\Log', $method)) {
             forward_static_call_array(array(self::NAME,$method),$arguments);
         }
@@ -33,6 +36,17 @@ class Log{
             if($method=='progress'){
                 echo $arguments[0]."\r";
             }
+        }else{
+            switch($CONFIG['debug']){
+                case 3:
+                    if($method=='info') echo "\n".$arguments[0];
+                case 2:
+                    if($method=='warning') echo "\n".$arguments[0];
+                case 1:
+                    if($method=='error') echo "\n".$arguments[0];
+                break;
+            }
+            
         }
     }
 }

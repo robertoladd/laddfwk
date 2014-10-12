@@ -1,6 +1,7 @@
 <?
 
 //    Copyright (C) 2014  Roberto Ladd
+//    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -15,3 +16,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
+/**
+ *  Place particular routes before generic ones. 
+ *  Routes resolving to any http method will be processed after particular method ones.
+ */
+
+\Core\Routes::add('/^\/welcome(?:\/(.*?))*$/i', 'home', 'welcome', \Core\Routes::ANY);
+
+\Core\Routes::add('/^\/$/i', 'home', 'welcome', \Core\Routes::ANY);
