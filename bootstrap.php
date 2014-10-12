@@ -29,7 +29,8 @@ ini_set('display_errors', $CONFIG['debug']);
 
 include_once($CONFIG['path'].'/core/autoload.php');
 
+$cli = (isset($cli)? $cli : false);
 
 $application = new \Core\Application;
 
-$application->start();
+$application->start($cli);

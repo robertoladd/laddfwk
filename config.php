@@ -17,3 +17,5 @@
 
 
 $CONFIG['debug']=true;
+
+$CONFIG['wwwroot']='localhost';//without ending slash neither protocol

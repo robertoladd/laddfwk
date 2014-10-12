@@ -20,8 +20,17 @@
 namespace Core;
 
 class Controller{
-    protected function display($view, $params=array()){
-        if(is_string($view)) echo $view;
-        echo View::get($view, $params);
+    protected function display($view, $params=array(), $status_code=200){
+        
+        if(!is_int($status_code)) throw new laddException("Status code $status_code unaccepted type (".gettype($status_code).")");
+        
+        if($view=='raw') return new Response($view, $status_code);
+        
+        return  new Response(View::get($view, $params), $status_code);
+    }
+    
+    
+    protected function status404($message){
+        return $this->display('404', array($message), 404);
     }
 }

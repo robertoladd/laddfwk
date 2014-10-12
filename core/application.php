@@ -25,8 +25,8 @@ class Application{
         
 	public function __construct(){}
         
-        public function start(){
-            \Core\Routes::init();
+        public function start($cli){
+            \Core\Routes::init($cli);
             \Core\Routes::dispatch();
         }
         

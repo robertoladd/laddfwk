@@ -29,15 +29,16 @@ class Routes{
     }
     
     
-    public static function init(){
-        if(php_sapi_name() !== 'cli'){
+    public static function init($cli=false){
+        if(!$cli){
             self::$_interface = 'other';
             self::loadRoutes();
-        }
-        self::$_interface = 'cli';
+        }else
+            self::$_interface = 'cli';
     }
     
     public static function dispatch(){
+        
         if(self::$_interface == 'cli'){
            return self::dispatchCLI(); 
         }
@@ -79,7 +80,10 @@ class Routes{
         
         if(!method_exists($controller, $method_name))  throw new laddException("Unknown method {$method_name}.", 0);
         
-        call_user_func_array(array($controller,$method_name),$method_args);
+        $response = call_user_func_array(array($controller,$method_name),$method_args);
+        
+        if(get_class($response)!= 'Core\\Response') throw new laddException("Unknown response type. Expected Response class object.");
+        $response->respond();
     }
     
     public static function loadRoutes(){

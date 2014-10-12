@@ -23,7 +23,7 @@ namespace Controller;
 class Test extends \Core\Controller{
     
     public function helloworld($name, $surname){
-        $this->display("Hello, {$name} {$surname}!")));
+        $this->display("raw","Hello, {$name} {$surname}!")));
     }
 }
 ```
