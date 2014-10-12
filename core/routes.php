@@ -95,6 +95,8 @@ class Routes{
         
         $rel_url = str_replace($wwwroot_parts['path'], '', $_SERVER['REQUEST_URI']);
         
+        $rel_url = str_replace('?'.$_SERVER['QUERY_STRING'], '', $rel_url);
+        
         foreach(self::$_routes[$req_method] as $route){
             $matches = array();
             if(preg_match($route['path_pattern'], $rel_url, $matches)){

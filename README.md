@@ -87,9 +87,9 @@ In routes.php
 \Core\Routes::add('/^\/$/i', 'home', 'welcome', \Core\Routes::ANY);
 
 ```
-Both routes resolve any kind of http method received. Particular method routes will preceede generic ones.
+Both routes resolve any kind of http method received. Particular method routes will precede generic ones.
 
-Notice that when placing paths with common method, the placement order is important.
+Notice that when placing paths with common a method, the placement order is important.
 
 
 ##TODO
@@ -100,5 +100,6 @@ Notice that when placing paths with common method, the placement order is import
 * Error handling
 * Persistence Layer
 * Vagrant development enviroment.
+* Template views
 * Multi-lang support
 * A real fullstack framework. :)
