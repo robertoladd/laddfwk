@@ -49,7 +49,7 @@ The previous command would call hellowold method of our Test controller with Joh
 
 Change php binary path and laddfwk path for your local instalation settings.
 
-To add help to your controller add a view in view/<controller>/help.cli.php
+To add help to your controller add a view in view/[controller]/help.cli.php
 
 ###Controllers and views
 
@@ -66,7 +66,7 @@ class Home extends \Core\Controller{
 }
 ```
 
-In view/<controller>/home.php
+In view/[controller]/home.php
 
 ```php
 <html>
