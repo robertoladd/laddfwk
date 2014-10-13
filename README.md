@@ -8,7 +8,10 @@ https://github.com/robertoladd/laddfwk
 
 * Command line interfase support for controllers.
     * Progress logging.
-    * Verbose logging.
+    * --verbose.
+    * --help.
+        * global help.
+        * controller help.
 * Full non restricted PHP views. Yes, you can do anything php let's you do.. Don't!
 * Class namespace based autoloading.
 * Log handling.
@@ -39,13 +42,14 @@ class Home extends \Core\Controller{
 
 ```Shell
 
-$php /var/www/laddfwk/cli.php test helloworld John Doe
+$php /var/www/laddfwk/cli.php home welcome John
 
 ```
 The previous command would call hellowold method of our Test controller with John and Doe as method parameters.
 
 Change php binary path and laddfwk path for your local instalation settings.
 
+To add help to your controller add a view in view/<controller>/help.cli.php
 
 ###Controllers and views
 
@@ -62,7 +66,7 @@ class Home extends \Core\Controller{
 }
 ```
 
-In view/home.php
+In view/<controller>/home.php
 
 ```php
 <html>
@@ -89,14 +93,12 @@ In routes.php
 ```
 Both routes resolve any kind of http method received. Particular method routes will precede generic ones.
 
-Notice that when placing paths with common a method, the placement order is important.
+Notice that when placing paths with a common method, the placement order is important.
 
 
 ##TODO
 
 
-* Add cli global help
-* Add cli controller help support
 * Error handling
 * Persistence Layer
 * Vagrant development enviroment.

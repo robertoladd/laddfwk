@@ -27,11 +27,24 @@ class Controller{
         
         if($view=='raw') return new Response((string) $params, $status_code, $content_type);
         
-        return  new Response(View::get($view, $params), $status_code, $content_type);
+        $classname = str_replace('controller\\', '', strtolower(get_class($this)));
+        
+        return  new Response(View::get($classname.'.'.$view, $params), $status_code, $content_type);
     }
     
     
     protected function status404($message='Not Found'){
         return $this->display('raw', $message, 404);
+    }
+    
+    public function help($controller=false){
+        $view = "help";
+        if($controller && !View::exists($controller.'.'.$view, 'cli')){
+            return $this->display('raw', "No help found for controller {$controller}.\n", 404);
+        }elseif(!$controller){
+            $controller = "help";
+        }
+                
+        return  $this->display($controller.'.'.$view);
     }
 }

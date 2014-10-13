@@ -130,7 +130,10 @@ class Routes{
             if($k==0)continue;
             
             if(stripos($v, '--')===0){
-                if($v=='--help') $controller_args[0]='help';
+                if($v=='--help'){
+                    $controller_args[0]='help';
+                    $controller_args[1]='help';
+                }
                 $flag=explode('=',$v);
                 if(!isset($flag[1]))$flag[1] = true;
                 $cmd_flags[str_replace('--', '', $flag[0])]=trim($flag[1]);
@@ -150,12 +153,24 @@ class Routes{
             }
         }
         
+        
         if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.", 0);
         
         $controller = new $controller_name;
         Application::setCLIFlags($cmd_flags);
         
-        if(!method_exists($controller, $method_name))  throw new laddException("Unknown method {$method_name}.", 0);
+        if(!method_exists($controller, $method_name)){
+            $method_name = 'help';
+            foreach($controller_args as $k => $v){
+                if($controller_args[0]=='help'){
+                    if($k>0){
+                        $method_args[]=$v;    
+                    }
+                }else{
+                    $method_args[]=$v;
+                }
+            }
+        }
         
         $response = call_user_func_array(array($controller,$method_name),$method_args);
         

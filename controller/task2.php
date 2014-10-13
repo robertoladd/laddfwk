@@ -7,6 +7,8 @@ class Task2 extends \Core\Controller{
     protected $addresses = array();
     
     public function address($id, $as_json=false){
+        $id = $id-1;//human friendly id's
+        
         $this->loadAddresses();
         if(!isset($this->addresses[$id])){
             return $this->status404();

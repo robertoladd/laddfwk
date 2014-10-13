@@ -22,11 +22,11 @@ namespace Core;
 
 class View {
     
-    public function get($view, $params){
+    public static function get($view, $params){
         global $CONFIG;
         
         if(\Core\Routes::getInterface()=='cli'){
-            $view_file = $CONFIG['path'].'/view/'.$view.'.cli.php';
+            $view_file = self::getPath($view, 'cli');
             if(file_exists($view_file)){
                 
                 extract($params);
@@ -36,7 +36,7 @@ class View {
                 return ob_get_clean();
             }else{
                 
-                $view_file = $CONFIG['path'].'/view/cli.php';
+                $view_file = self::getPath('default', 'cli');
                 $output = $params[0];
                 ob_start();
                 include($view_file);
@@ -46,7 +46,7 @@ class View {
                 
         }
         
-        $view_file = $CONFIG['path'].'/view/'.$view.'.php';
+        $view_file = self::getPath($view);
         if(!file_exists($view_file)){
             throw new laddException("Undefined view {$view}.");
         }
@@ -55,5 +55,16 @@ class View {
         include($view_file);
 
         return ob_get_clean();
+    }
+    
+    
+    protected static function getPath($view, $sufix=''){
+        global $CONFIG;
+        if($sufix)$sufix ='.'.$sufix;
+        return $CONFIG['path'].'/view/'.str_replace('.', '/', $view).$sufix.'.php';
+    }
+    
+    public static function exists($view, $sufix=''){
+        return file_exists(self::getPath($view, $sufix));
     }
 }
