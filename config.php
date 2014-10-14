@@ -20,3 +20,13 @@
 $CONFIG['debug']=3;
 
 $CONFIG['wwwroot']='http://localhost';//without ending slash
+
+$CONFIG['db_driver']='mysql';
+
+$CONFIG['db_driver_config']=array(
+    'username' => 'root',
+    'password' => 'root',
+    'host' => 'localhost',
+    'port' => '3306',
+    'database' => 'laddfwk',
+);

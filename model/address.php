@@ -1,6 +1,6 @@
 <?
 
-//    Copyright (C) 2014  Roberto Ladd 
+//    Copyright (C) 2014  Roberto Ladd
 //    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -16,24 +16,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace Model;
 
-$CONFIG['path'] = __DIR__;
-
-
-include_once($CONFIG['path'].'/config.php');
-
-if(file_exists($CONFIG['path'].'/config_overide/config.php')){
-	include_once($CONFIG['path'].'/config_overide/config.php');
+class Address extends \Core\Model{
+    
+    protected static $_table = 'addresses';
+    
+    protected static $_field_map = array('name', 'phone_number', 'address', 'ts_created', 'ts_updated');
+    
+    
 }
-
-ini_set('display_errors', (bool) $CONFIG['debug']);
-
-include_once($CONFIG['path'].'/core/autoload.php');
-
-set_error_handler(array('\Core\Error', 'handle'));
-
-$cli = (isset($cli)? $cli : false);
-
-$application = new \Core\Application;
-
-$application->start($cli);

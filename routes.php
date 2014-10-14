@@ -27,8 +27,12 @@
 
 \Core\Routes::add('/^\/$/i', 'home', 'welcome', \Core\Routes::ANY);
 
-\Core\Routes::add('/^\/address(?:\/([0-9]*?)(:?\.(json)))*$/i', 'task2', 'address', \Core\Routes::GET);
-\Core\Routes::add('/^\/address(?:\/([0-9]*?))*$/i', 'task2', 'address', \Core\Routes::GET);
+\Core\Routes::add('/^\/address\/(?:([0-9]*?)(:?\.(json))?)$/i', 'task2', 'address', \Core\Routes::GET);
 
-\Core\Routes::add('/^\/addresses(:?\.(json))*$/i', 'task2', 'addresses', \Core\Routes::GET);
-\Core\Routes::add('/^\/addresses(?:\/)*$/i', 'task2', 'addresses', \Core\Routes::GET);
+\Core\Routes::add('/^\/addresses(:?\.(json))?$/i', 'task2', 'addresses', \Core\Routes::GET);
+//\Core\Routes::add('/^\/addresses(?:\/)*$/i', 'task2', 'addresses', \Core\Routes::GET);
+
+
+\Core\Routes::add('/^\/t3\/address(?:\/([0-9]*?))?\/form(:?\.(json))?$/i', 'task3', 'form', \Core\Routes::GET);
+\Core\Routes::add('/^\/t3\/address(?:\/([0-9]*?)(:?\.(json)))*$/i', 'task3', 'index', \Core\Routes::GET);
+

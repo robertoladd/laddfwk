@@ -1,6 +1,6 @@
 <?
 
-//    Copyright (C) 2014  Roberto Ladd 
+//    Copyright (C) 2014  Roberto Ladd
 //    https://github.com/robertoladd/laddfwk
 //
 //    This program is free software: you can redistribute it and/or modify
@@ -16,24 +16,26 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace Core;
 
-$CONFIG['path'] = __DIR__;
+class Error{
+    
+    static $_types = array(1=>'Error', 2 =>'Warning', 8 => 'Notice');
+    
+    public static function handle($errno, $errstr, $errfile, $errline, $context){
+        global $CONFIG;
+        
+        $message = View::get('500', array('error'=>$errstr, 'file'=>$errfile, 'line'=>$errline, 'type'=>self::$_types[$errno]));
+        
+        switch($CONFIG['debug']){
+            case 0:
+                mail($CONFIG['webmaster_email'], 'Website Error', $message);
+            break;
+            default:
+                $response = new Response($message, 500);
 
-
-include_once($CONFIG['path'].'/config.php');
-
-if(file_exists($CONFIG['path'].'/config_overide/config.php')){
-	include_once($CONFIG['path'].'/config_overide/config.php');
+                $response->respond();
+            break;
+        }
+    }
 }
-
-ini_set('display_errors', (bool) $CONFIG['debug']);
-
-include_once($CONFIG['path'].'/core/autoload.php');
-
-set_error_handler(array('\Core\Error', 'handle'));
-
-$cli = (isset($cli)? $cli : false);
-
-$application = new \Core\Application;
-
-$application->start($cli);
