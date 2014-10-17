@@ -24,7 +24,7 @@ class Response{
     protected $content;
     protected $content_type;
     
-    protected static $status_msgs = array(404=>"Not Found",200=>"OK");
+    protected static $status_msgs = array(200=>"OK", 201=>"Created", 204=>"Done. No content" ,400=>"Wrong request", 404=>"Not Found");
 
 
 

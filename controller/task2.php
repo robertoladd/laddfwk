@@ -6,7 +6,7 @@ class Task2 extends \Core\Controller{
     
     protected $addresses = array();
     
-    public function address($id, $as_json=false){
+    public function address($id, $as_html=false){
         $id = $id-1;//human friendly id's
         
         $this->loadAddresses();
@@ -14,20 +14,20 @@ class Task2 extends \Core\Controller{
             return $this->status404();
         }
         
-        if($as_json){
-            return $this->display('raw', json_encode($this->addresses[$id]), 200, 'application/json');
+        if($as_html){
+            return $this->display('addresses', array('addresses'=>array($this->addresses[$id])));
         }
-        else return $this->display('addresses', array('addresses'=>array($this->addresses[$id])));
+        else return $this->display('raw', json_encode($this->addresses[$id]), 200, 'application/json');
         
     }
     
-    public function addresses($as_json=false){
+    public function addresses($as_html=false){
         $this->loadAddresses();
         
-        if($as_json){
-            return $this->display('raw', json_encode($this->addresses), 200, 'application/json');
+        if($as_html){
+            return $this->display('addresses', array('addresses'=>$this->addresses));
         }
-        else return $this->display('addresses', array('addresses'=>$this->addresses));
+        else return $this->display('raw', json_encode($this->addresses), 200, 'application/json');
     }
     
     protected function loadAddresses(){

@@ -49,11 +49,12 @@ class MySQLDB extends \Core\DBConnection{
     /**
      *
      * @param PDOStatement $ref
+     * @param array $bindings
      * @return \PDOStatement|boolean 
      */
     
-    public function execute($ref){
-        if($ref->execute()) return $ref;
+    public function execute($result, $bindings=array()){
+        if($result->execute($bindings)) return $result;
         else return false;
     }
     
@@ -80,7 +81,7 @@ class MySQLDB extends \Core\DBConnection{
      */
     
     public function numRows($result){
-        return $res->rowCount();
+        return $result->rowCount();
     }
     
     /**
@@ -89,7 +90,7 @@ class MySQLDB extends \Core\DBConnection{
      * @return type 
      */
     public function affectedRows($result){
-        return $res->rowCount();
+        return $result->rowCount();
     }
     
     /**
@@ -138,5 +139,15 @@ class MySQLDB extends \Core\DBConnection{
     
     public function errnum($result=null){
         return self::$_connection->errorCode();
+    }
+    
+    /**
+     *
+     * @param NULL $result
+     * @return int 
+     */
+    
+    public function lastInsertId($result=null){
+        return self::$_connection->lastInsertId();
     }
 }

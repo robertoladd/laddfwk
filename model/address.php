@@ -22,7 +22,7 @@ class Address extends \Core\Model{
     
     protected static $_table = 'addresses';
     
-    protected static $_field_map = array('name', 'phone_number', 'address', 'ts_created', 'ts_updated');
+    protected static $_field_map = array('id', 'name', 'phone_number', 'address', 'ts_created', 'ts_updated');
     
     
 }

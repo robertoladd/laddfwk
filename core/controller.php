@@ -38,7 +38,15 @@ class Controller{
     }
     
     protected function status200($message='OK'){
-        return $this->display('raw', $message, 404);
+        return $this->display('raw', $message, 200);
+    }
+    
+    protected function status201($message='Created'){
+        return $this->display('raw', $message, 201);
+    }
+    
+    protected function status204($message='Done. No content.'){
+        return $this->display('raw', $message, 204);
     }
     
     public function help($controller=false){

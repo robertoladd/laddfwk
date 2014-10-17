@@ -1,8 +1,122 @@
+body{
+    font-family: arial, verdana, Georgia, Helvetica;
+    margin:0;
+    text-align: center;
+    background: #F5F6F9;
+}
+
+h1{
+    margin:20px;
+    font-size: 3em;
+    text-align: center;
+    color: rgba(189, 194, 210, 1);
+    text-shadow: -1px -1px 1px rgba(148, 148, 148, 1), 1px 1px 0px rgba(255, 255, 255, 0.73);
+}
+
+.container{
+    margin:30px auto;
+    text-align: left;
+    display:table;
+    width:70%;
+    padding:1em;
+    background: #FFFFFF;
+    border:1px solid #EAEDF5;
+    border-radius: 6px;
+    box-shadow: 0 0 2px rgba(210, 210, 210, 0.46);
+}
 
 
-
+table{
+    width: 100%;
+}
 
 table tr td{
     padding:10px;
-    border:1px solid #eee;
+    border:1px solid #fff;
+    background: #F8F8FA;
+    text-align: center;
+}
+td.actions{
+    text-align: left;
+    padding: 20px;
+    width:20px;
+}
+td.actions .btn-delete,td.actions .btn-edit{
+    width:100%;
+    text-align: center;
+}
+
+a.btn, .btn-delete, .btn-edit, .btn-save{
+    position:relative;
+    display:inline-block;
+    padding:4px 20px;
+    text-align: center;
+    border:1px solid #EAEDF5;
+    background: #475376;
+    border-radius: 6px;
+    color:#fff;
+    text-decoration: none;
+    line-height: 1.6em;
+    vertical-align: top;
+    cursor:pointer;
+}
+a.btn, .btn-save{
+    margin:20px 0;
+}
+.btn-delete{
+    background: rgb(144, 72, 72);
+}
+a.btn:hover, .btn-edit:hover, .btn-save:hover{
+    background: #8C98BB;
+}
+
+.btn-delete:hover{
+    background: rgb(192, 101, 101);
+}
+
+a.btn i{
+    position:relative;
+    margin:0 10px 0 -10px;
+    font-size: 1.6em;
+}
+
+label{
+    padding:10px;
+    width:80px;
+    display:inline-block;
+}
+
+
+.address_form{
+    line-height: 30px;
+}
+
+.save_btn{
+    margin-left:59px;
+}
+
+.message_errors{
+    color:rgb(176, 82, 82);
+    font-weight: bold;
+}
+
+.message_success{
+    color:green;
+    font-weight: bold;
+}
+
+.message_errors a, .message_success a{
+    font-weight: normal;
+}
+
+.container form{
+    margin:0 auto;
+    text-align: center;
+}
+
+label{
+    font-weight: bold;
+    color:#666;
+    min-width: 80px;
+    text-align: left;
 }

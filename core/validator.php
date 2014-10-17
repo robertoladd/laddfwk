@@ -49,4 +49,37 @@ class Validator{
         return filter_var($var, FILTER_VALIDATE_IP);
     }
     
+    public static function multi($params, $validations){
+        $results = array();
+        $return = true;
+        foreach($validations as $required => $validations2){
+            
+            $required = $required == 'required';//leave it as boolean
+            
+            foreach($validations2 as $param => $param_validations){
+                if(is_string($param_validations)){//this is to accept single validations as a direct string
+                    $param_validations = array($param_validations);
+                }
+                foreach($param_validations as $param_validation){
+                    
+                    if(!method_exists('\\Core\\Validator', $param_validation)) throw new laddException('Attempt to use undefined validation method!');
+                            
+                    if(!$required || !empty($params[$param])){
+                        
+                        if(!isset($results[$param]))$results[$param]=array();
+                        
+                        $results[$param][$param_validation] = self::$param_validation($params[$param]);
+                        if(!$results[$param][$param_validation]) $return = false;
+                        
+                    }elseif($required){
+                        $results[$param][$param_validation] = false;
+                        $return = false;
+                    }
+                }
+            }
+        }
+        
+        return ($return ? $return : $results);
+    }
+    
 }

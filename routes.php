@@ -27,12 +27,19 @@
 
 \Core\Routes::add('/^\/$/i', 'home', 'welcome', \Core\Routes::ANY);
 
-\Core\Routes::add('/^\/address\/(?:([0-9]*?)(:?\.(json))?)$/i', 'task2', 'address', \Core\Routes::GET);
+\Core\Routes::add('/^\/address\/(?:([0-9]*?)(:?\.(html))?)$/i', 'task2', 'address', \Core\Routes::GET);
 
-\Core\Routes::add('/^\/addresses(:?\.(json))?$/i', 'task2', 'addresses', \Core\Routes::GET);
+\Core\Routes::add('/^\/addresses(:?\.(html))?$/i', 'task2', 'addresses', \Core\Routes::GET);
 //\Core\Routes::add('/^\/addresses(?:\/)*$/i', 'task2', 'addresses', \Core\Routes::GET);
 
 
-\Core\Routes::add('/^\/t3\/address(?:\/([0-9]*?))?\/form(:?\.(json))?$/i', 'task3', 'form', \Core\Routes::GET);
-\Core\Routes::add('/^\/t3\/address(?:\/([0-9]*?)(:?\.(json)))*$/i', 'task3', 'index', \Core\Routes::GET);
+\Core\Routes::add('/^\/t3\/address(?:\/([0-9]*?))?\/form(:?\.(html))?$/i', 'task3', 'form', \Core\Routes::GET);
+
+\Core\Routes::add('/^\/t3\/address(?:\/([0-9]*?))?(:?\.(html))?$/i', 'task3', 'index', \Core\Routes::GET);
+
+\Core\Routes::add('/^\/t3\/address(:?\.(html))?$/i', 'task3', 'create', \Core\Routes::POST);
+
+\Core\Routes::add('/^\/t3\/address\/([0-9]*?)(:?\.(html))?$/i', 'task3', 'delete', \Core\Routes::DELETE);
+
+\Core\Routes::add('/^\/t3\/address\/([0-9]*?)(:?\.(html))?$/i', 'task3', 'update', \Core\Routes::POST);
 

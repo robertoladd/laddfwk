@@ -32,40 +32,14 @@ class Model {
     
     public function __construct($attrs=array()){
         foreach($attrs as $key => $value){
-            if(in_array($key, static::$_field_map)) $this->$key = $value;
+            if(in_array((string)$key, static::$_field_map)) $this->$key = $value;
         }
     }
     
     public function save(){
         $dbo = \Core\DBConnection::getInstance();
-        $fields_values = array();
-        foreach($_field_map as $field){
-            if(isset($this->{$field})){
-                $fields_values[':'.$field] = $this->{$field};
-                $fields_sets[$field]= "$field = :$field";
-            }
-        }
         
-        
-        //TODO: this should be done at driver level. Sorry :S
-        $sql = "INSERT INTO {$dbo->database}.".static::$_table." SET ".implode(',', $fields_sets)."";
-        
-        //if update
-        unset($fields_sets[static::$_instanceid]);
-        
-        $sql .= " ON DUPLICATE KEY UPDATE ".implode(',', $fields_sets)."";
-        
-        try{
-            $res = $dbo->prepare($sql);
-            $dbo->execute($res, $fields_values);
-        }catch(PDOException $e){
-            throw new laddException('Failed to save model record. ERR:'.$e->getMessage());
-        }
-        
-        if($dbo->lastInsertId()>0){
-            $this->{static::$_instanceid} = $dbo->lastInsertId();
-        }
-        
+        return $dbo->modelSave($this, static::$_field_map, static::$_table, static::$_instanceid);
     }
     
     
@@ -76,15 +50,8 @@ class Model {
             return false;
         }
         $dbo = \Core\DBConnection::getInstance();
-        $sql = "DELETE FROM {$dbo->database}.".static::$_table." WHERE {static::$_instanceid} =  {$this->{static::$_instanceid}}";
         
-        try{
-            $res = $dbo->query($sql);
-        }catch(PDOException $e){
-            throw new laddException('Failed to delete model record. ERR:'.$e->getMessage());
-        }
-        
-        return (bool) $dbo->affectedRows($res);
+        return $dbo->modelDelete($this, static::$_table, static::$_instanceid);
     }
     
     
@@ -92,45 +59,24 @@ class Model {
         if(!is_numeric($id)) throw new laddException('Attempt to find model without numeric reference.');
         
         $dbo = \Core\DBConnection::getInstance();
-        $sql = "SELECT * FROM {$dbo->database}.".static::$_table." WHERE {static::$_instanceid} = {$this->{static::$_instanceid}}";
-        
-        try{
-            $res = $dbo->query($sql);
-            $instanceClass = get_called_class();
-            $instance = new $instanceClass($dbo->fetch($res));
-        }catch(PDOException $e){
-            throw new laddException('Failed to delete model record. ERR:'.$e->getMessage());
-        }
-        return $instance;
+        $instanceClass = get_called_class();
+        return $dbo->modelFind($id, $instanceClass, static::$_table, static::$_instanceid);
     }
     
     
     public static function all(){
         
         $dbo = \Core\DBConnection::getInstance();
+        $instanceClass = get_called_class();
         
-        $sql = "SELECT * FROM {$dbo->database}.".static::$_table.";";
-        
-        $instances = array();
-        
-        try{
-            $res = $dbo->query($sql);
-            
-            $instanceClass = get_called_class();
-            while($row = $dbo->fetch($res)){
-                $instances[] = new $instanceClass($row);
-            }
-        }catch(PDOException $e){
-            throw new laddException('Failed to delete model record. ERR:'.$e->getMessage());
-        }
-        return $instances;
+        return $dbo->modelAll($instanceClass, static::$_table);
     }
     
     public static function mold(){
         $instanceClass = get_called_class();
         $instance = new $instanceClass();
         foreach(static::$_field_map as $field){
-            $instance->$field;
+            $instance->$field=null;
         }
         return $instance;
     }

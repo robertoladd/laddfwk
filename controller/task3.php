@@ -21,33 +21,89 @@ namespace Controller;
 
 class Task3 extends \Core\Controller{
     
-    public function delete($id, $as_json=false){
-        if(!\Core\Validator::int($id)){
-            return $this->status404();
-        }
-        $address = \Model\Address::find($id);
+    public function delete($id, $as_html=false){
         
-        if($address->id<0){
-            return $this->status404();
-        }
+        $address = \Model\Address::find((int) $id);
+        
+        if(!isset($address->id)) return $this->status404();
+        if($address->id<0) return $this->status404();
+        
         $address->delete();
-        return $this->status200();
-    }
-    
-    public function create($as_json=false){
         
-    }
-    
-    public function update($as_json=false){
+        if($as_html){
+            return $this->display('success_message', array('action'=>'Delete'), 200);
+        }
         
+        return $this->status204();
     }
     
-    public function form($id=false, $as_json=false){
-        if($id){
-            if(!\Core\Validator::int($id)){
-                return $this->status404();
+    public function create($as_html=false){
+        
+        
+        $validations = array(
+            'required'=> array('name'=>'string', 'phone_number'=>array('string'), 'address'=>array('string')),
+            'optional'=>array()
+        );
+        if(($result = \Core\Validator::multi($_POST, $validations)) !== true){
+            if($as_html){
+                return $this->display('errors_message', array('errors'=>$result), 400);
+            }else{
+                return $this->display('raw', json_encode(array('errors'=>$result)), 400);
             }
-            $address = \Model\Address::find($id);
+        }
+        
+        $params = array('name'=>$_POST['name'], 'phone_number'=>$_POST['phone_number'], 'address'=>$_POST['address']);
+        $address = new \Model\Address($params);
+        
+        if($address->save()){
+            if($as_html){
+                return $this->display('success_message', array('action'=>'Create'), 200);
+            }else{
+                return $this->status201();
+            }
+        }
+        throw new \Core\laddException('Failed to save task3 resource');
+    }
+    
+    public function update($id, $as_html=false){
+        
+        $address = \Model\Address::find((int) $id);
+        
+        if(!isset($address->id)) return $this->status404();
+        if($address->id<0) return $this->status404();
+        
+        $validations = array(
+            'required'=> array('name'=>'string', 'phone_number'=>array('string'), 'address'=>array('string')),
+            'optional'=>array()
+        );
+        if(($result = \Core\Validator::multi($_POST, $validations)) !== true){
+            if($as_html) return $this->display('errors_message', array('action'=>'Create'), 400);
+            else{
+                return $this->display('raw', json_encode(array('errors'=>$result)), 400);
+            }
+        }
+        
+        
+        $address->name=$_POST['name'];
+        $address->phone_number=$_POST['phone_number'];
+        $address->address=$_POST['address'];
+        
+        
+        if($address->save()){
+            if($as_html){
+                return $this->display('success_message', array('action'=>'Update'), 200);
+            }else{
+                return $this->status204();
+            }
+        }
+        throw new \Core\laddException('Failed to save task3 resource');
+    }
+    
+    
+    public function form($id=false, $as_html=false){
+        if($id){
+            
+            $address = \Model\Address::find((int) $id);
 
             if($address->id<0){
                 return $this->status404();
@@ -57,19 +113,16 @@ class Task3 extends \Core\Controller{
             $address = \Model\Address::mold($id);
         }
         
-        if($as_json){
-            return $this->display('raw', json_encode($address), 200, 'application/json');
+        if($as_html){
+            return $this->display('address_form', array('address'=>$address));
         }
-        
-        else return $this->display('address_form', array('address'=>$address));
+        else return $this->display('raw', json_encode($address), 200, 'application/json');
     }
     
-    public function index($id=false, $as_json=false){
+    public function index($id=false, $as_html=false){
         if($id){
-            if(!\Core\Validator::int($id)){
-                return $this->status404();
-            }
-            $address = \Model\Address::find($id);
+            
+            $address = \Model\Address::find((int) $id);
 
             if($address->id<0){
                 return $this->status404();
@@ -84,10 +137,9 @@ class Task3 extends \Core\Controller{
             $res = $addresses;
         }
         
-        if($as_json){
-            return $this->display('raw', json_encode($json_res), 200, 'application/json');
+        if($as_html){
+            return $this->display('addresses', array('addresses'=>$res));
         }
-        
-        else return $this->display('addresses', array('addresses'=>$res));
+        else return $this->display('raw', json_encode($json_res), 200, 'application/json');
     }
 }

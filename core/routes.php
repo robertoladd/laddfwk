@@ -57,7 +57,7 @@ class Routes{
             case 'POST':
                 $req_method = self::POST;
                 if(isset($_POST['fake_method'])){//This is to allow browsers to use RESFULL PUT and DELETE non supported methods.
-                    switch($_POST['fake_method']){
+                    switch(strtoupper($_POST['fake_method'])){
                         case 'PUT':
                             $req_method = self::PUT;
                         break;
@@ -88,6 +88,8 @@ class Routes{
     
     protected static function dispatchRoute($req_method){
         global $CONFIG;
+        
+        if(!isset(self::$_routes[$req_method])) return false;
         
         if(!is_array(self::$_routes[$req_method])) return false;
         

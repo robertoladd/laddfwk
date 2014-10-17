@@ -79,11 +79,94 @@ abstract class DBConnection{
         }
     }
     
+    public function modelSave($model, $field_map, $table, $instanceid){
+        $fields_values = array();
+        $update = false;
+        
+        foreach($field_map as $field){
+            if(isset($model->{$field})){
+                $fields_values[':'.$field] = $model->{$field};
+                $fields_sets[$field]= "$field = :$field";
+            }
+        }
+        
+        
+        $sql = "INSERT INTO {$this->database}.".$table." SET ".implode(',', $fields_sets)."";
+        
+        //if update
+        if(isset($model->id)){
+            if($model->id>0){
+                unset($fields_sets[$instanceid]);
+                $update = true;
+            }
+        }
+        
+        $sql .= " ON DUPLICATE KEY UPDATE ".implode(',', $fields_sets)."";
+        
+        try{
+            $res = $this->prepare($sql);
+            $this->execute($res, $fields_values);
+        }catch(PDOException $e){
+            throw new laddException('Failed to save model record. ERR:'.$e->getMessage());
+        }
+        
+        if($update){
+            return true;
+        }elseif($this->lastInsertId()>0){
+            $model->{$instanceid} = $this->lastInsertId();
+            return true;
+        }
+        
+        throw new \Core\laddException('Failed to save model resource');
+    }
+    
+    public function modelDelete($model, $table, $instanceid){
+        
+        $sql = "DELETE FROM {$this->database}.".$table." WHERE ".$instanceid." =  {$model->{$instanceid}}";
+        
+        try{
+            $res = $this->query($sql);
+        }catch(PDOException $e){
+            throw new laddException('Failed to delete model record. ERR:'.$e->getMessage());
+        }
+        
+        return (bool) $this->affectedRows($res);
+    }
+    
+    public function modelFind($id, $instanceClass, $table, $instanceid){
+        $sql = "SELECT * FROM {$this->database}.".$table." WHERE ".$instanceid." = {$id}";
+        
+        try{
+            $res = $this->query($sql);
+            $instance = new $instanceClass((array) $this->fetch($res));
+        }catch(PDOException $e){
+            throw new laddException('Failed to delete model record. ERR:'.$e->getMessage());
+        }
+        return $instance;
+    }
+    
+    public function modelAll($instanceClass, $table){
+        $sql = "SELECT * FROM {$this->database}.".$table.";";
+        
+        $instances = array();
+        
+        try{
+            $res = $this->query($sql);
+            
+            while($row = $this->fetch($res)){
+                $instances[] = new $instanceClass($row);
+            }
+        }catch(PDOException $e){
+            throw new laddException('Failed to delete model record. ERR:'.$e->getMessage());
+        }
+        return $instances;
+    }
+    
     public abstract function connect();
     
     public abstract function prepare($query, $options=array());
     
-    public abstract function execute($result);
+    public abstract function execute($result, $bindings=array());
     
     public abstract function query($query);
     
@@ -96,5 +179,8 @@ abstract class DBConnection{
     public abstract function error($result);
     
     public abstract function errnum($result);
+    
+    
+    public abstract function lastInsertId($result);
     
 }
