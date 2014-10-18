@@ -37,7 +37,7 @@ class Application{
             self::$_flags = $flags;
         }
         
-        public function flag($flag){
+        public static function flag($flag){
             if(!isset(self::$_flags[$flag])) return;
             
             return self::$_flags[$flag];

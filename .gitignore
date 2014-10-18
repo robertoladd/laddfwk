@@ -27,3 +27,11 @@ config_overide/config.php
 /logs/errors/application_exception.1.log
 /logs/errors/application_exception.2.log
 /logs/errors/application_exception.5.log
+/.vagrant/
+/logs/errors/strict.5.log
+/logs/errors/strict.4.log
+/logs/errors/strict.3.log
+/logs/errors/strict.1.log
+/logs/errors/strict.6.log
+/logs/errors/strict.2.log
+/logs/errors/strict.7.log

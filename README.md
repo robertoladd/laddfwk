@@ -152,9 +152,7 @@ if(isset($address->id)){
 
 ##TODO
 
-
-* Error handling
-* Vagrant development enviroment.
+* Unit tests
 * Template views
 * Multi-lang support
 * A real fullstack framework. :)

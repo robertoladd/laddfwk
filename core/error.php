@@ -20,7 +20,7 @@ namespace Core;
 
 class Error{
     
-    static $_types = array(1024=>'Application Exception', 1=>'Error', 2 =>'Warning', 8 => 'Notice');
+    static $_types = array(1024=>'Application Exception', 1=>'Error', 2 =>'Warning', 8 => 'Notice', 2048 => 'Strict');
     
     public static function handle($errno, $errstr, $errfile, $errline, $context){
         global $CONFIG;
@@ -66,8 +66,9 @@ class Error{
         global $CONFIG;
         
         $type = str_replace(' ', '_', strtolower(self::$_types[$errno]));
+        $remote_addr = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'undefined');
         
-        $message = "\n\r".date('Y-m-d H:i:s')."[{$_SERVER['REMOTE_ADDR']}] {$errfile}:{$errline} {$errstr}";
+        $message = "\n\r".date('Y-m-d H:i:s')."[{$remote_addr}] {$errfile}:{$errline} {$errstr}";
         $message = str_replace("\n", "\n\t", $message);
         
         //the day of the week is used as a simple log rotation method. Only the last 7 days will be available.

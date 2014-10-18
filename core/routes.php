@@ -95,7 +95,8 @@ class Routes{
         
         $wwwroot_parts= parse_url($CONFIG['wwwroot']);
         
-        $rel_url = str_replace($wwwroot_parts['path'], '', $_SERVER['REQUEST_URI']);
+        if(isset($wwwroot_parts['path'])) $rel_url = str_replace($wwwroot_parts['path'], '', $_SERVER['REQUEST_URI']);
+        else $rel_url = $_SERVER['REQUEST_URI'];
         
         $rel_url = str_replace('?'.$_SERVER['QUERY_STRING'], '', $rel_url);
         
@@ -123,7 +124,7 @@ class Routes{
         }
     }
     
-    protected function dispatchCLI(){
+    protected static function dispatchCLI(){
         global $argv;
         if(!ini_get('register_argc_argv')) throw new laddException('Disabled register_argc_argv ini parameter.');
         
@@ -146,7 +147,8 @@ class Routes{
         
         $controller_name = '\\Controller\\'.ucfirst(strtolower($controller_args[0]));
         
-        $method_name = $controller_args[1];
+        if(isset($controller_args[1])) $method_name = $controller_args[1];
+        else $method_name = 'help';
         $method_args = array();
         
         foreach($controller_args as $k => $v){

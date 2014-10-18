@@ -25,7 +25,7 @@ $CONFIG['error_logging_email']='testfwkerror@yopmail.com';//email used for error
 
 $CONFIG['from_email'] = 'laddfwk <laddfwk@localhost>';//From address used for sending system emails.
 
-$CONFIG['wwwroot']='http://localhost';//without ending slash
+$CONFIG['wwwroot']='http://localhost:8080';//without ending slash
 
 $CONFIG['db_driver']='mysql';
 

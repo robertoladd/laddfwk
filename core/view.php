@@ -22,7 +22,7 @@ namespace Core;
 
 class View {
     
-    public static function get($view, $params){
+    public static function get($view, $params=array()){
         global $CONFIG;
         
         if(\Core\Routes::getInterface()=='cli'){

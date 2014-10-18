@@ -116,7 +116,7 @@ class Task1 extends \Core\Model{
                         $_start_from_i[$int_index]=$i;
                         
                         //start new range.
-                        return self::large_multiples_sum($threshold, $ints, $sum);
+                        return self::largeMultiplesSum($threshold, $ints, $sum);
                     }else{
                         
                         //save loop index for current number

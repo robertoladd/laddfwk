@@ -24,7 +24,7 @@ class Response{
     protected $content;
     protected $content_type;
     
-    protected static $status_msgs = array(200=>"OK", 201=>"Created", 204=>"Done. No content" ,400=>"Wrong request", 404=>"Not Found");
+    protected static $status_msgs = array(200=>"OK", 201=>"Created", 204=>"Done. No content" ,400=>"Wrong request", 404=>"Not Found", 500=>"Application error");
 
 
 
@@ -38,8 +38,13 @@ class Response{
     }
     
     public function respond(){
-        header($_SERVER["SERVER_PROTOCOL"]." {$this->status_code} ".self::$status_msgs[$this->status_code]);
-        header('Content-Type: '.$this->content_type);
+        
+        if(\Core\Routes::getInterface() !='cli'){
+            $protocol = (isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : 'HTTP/1.1');
+
+            header($protocol." {$this->status_code} ".self::$status_msgs[$this->status_code]);
+            header('Content-Type: '.$this->content_type);
+        }
         
         echo $this->content;
         exit;

@@ -28,6 +28,10 @@ class Controller{
         if($view=='raw') return new Response((string) $params, $status_code, $content_type);
         
         $classname = str_replace('controller\\', '', strtolower(get_class($this)));
+        if($classname == 'help' && $view != 'help'){
+            $classname = $view;
+            $view = 'help';
+        }
         
         return  new Response(View::get($classname.'.'.$view, $params), $status_code, $content_type);
     }
@@ -51,12 +55,13 @@ class Controller{
     
     public function help($controller=false){
         $view = "help";
+        
         if($controller && !View::exists($controller.'.'.$view, 'cli')){
             return $this->display('raw', "No help found for controller {$controller}.\n", 404);
-        }elseif(!$controller){
-            $controller = "help";
+        }elseif($controller){
+            $view = $controller;
         }
                 
-        return  $this->display($controller.'.'.$view);
+        return  $this->display($view);
     }
 }
