@@ -127,9 +127,9 @@ class Address extends \Core\Model{
 ```
 
 As you can see, all you need is to define the name of the table and fields to be used, a primary key "id" is always expected, but can also be re-defined setting $_instanceid static variable.
-After creating our new model save and delete methods will be available. save is use for both creation and update actions. 
+After creating our new model save and delete methods will be available. save is used for both creation and update actions. 
 
-Also "all" and "find" static methods are available, wich will return an array or a single model's object.
+Also "all" and "find" static methods are available, wich will return an array or a single model's object correspondingly.
 
 
 ```php

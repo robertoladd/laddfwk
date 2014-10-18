@@ -120,6 +120,7 @@ class Task3 extends \Core\Controller{
     }
     
     public function index($id=false, $as_html=false){
+        
         if($id){
             
             $address = \Model\Address::find((int) $id);

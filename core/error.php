@@ -20,22 +20,65 @@ namespace Core;
 
 class Error{
     
-    static $_types = array(1=>'Error', 2 =>'Warning', 8 => 'Notice');
+    static $_types = array(1024=>'Application Exception', 1=>'Error', 2 =>'Warning', 8 => 'Notice');
     
     public static function handle($errno, $errstr, $errfile, $errline, $context){
         global $CONFIG;
         
-        $message = View::get('500', array('error'=>$errstr, 'file'=>$errfile, 'line'=>$errline, 'type'=>self::$_types[$errno]));
-        
-        switch($CONFIG['debug']){
-            case 0:
-                mail($CONFIG['webmaster_email'], 'Website Error', $message);
+        switch($CONFIG['error_logging']){
+            case 'email':
+                self::email($errno, $errstr, $errfile, $errline, $context);
+            break;    
+            case 'file':
+                self::file($errno, $errstr, $errfile, $errline, $context);
+            break;    
+            case 'both':
+                self::email($errno, $errstr, $errfile, $errline, $context);
+                self::file($errno, $errstr, $errfile, $errline, $context);
             break;
-            default:
-                $response = new Response($message, 500);
-
-                $response->respond();
+            default:        
             break;
         }
+        
+        if($CONFIG['debug']){
+            $errstr = nl2br($errstr);
+            $message = View::get('500', array('error'=>$errstr, 'file'=>$errfile, 'line'=>$errline, 'type'=>self::$_types[$errno]));
+            $response = new Response($message, 500);
+            $response->respond();
+        }
+    }
+    
+    public static function email($errno, $errstr, $errfile, $errline, $context){
+        global $CONFIG;
+        
+        $subject = strtoupper(self::$_types[$errno])." at ({$CONFIG['wwwroot']})";
+        $errstr = nl2br($errstr);
+        $message = View::get('500', array('error'=>$errstr, 'file'=>$errfile, 'line'=>$errline, 'type'=>self::$_types[$errno]));
+        
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        $headers .= 'From: '.$CONFIG['from_email'] . "\r\n";
+
+        return mail($CONFIG['error_logging_email'], $subject, $message, $headers);
+    }
+    
+    public static function file($errno, $errstr, $errfile, $errline, $context){
+        global $CONFIG;
+        
+        $type = str_replace(' ', '_', strtolower(self::$_types[$errno]));
+        
+        $message = "\n\r".date('Y-m-d H:i:s')."[{$_SERVER['REMOTE_ADDR']}] {$errfile}:{$errline} {$errstr}";
+        $message = str_replace("\n", "\n\t", $message);
+        
+        //the day of the week is used as a simple log rotation method. Only the last 7 days will be available.
+        $error_file = $CONFIG['path'].'/logs/errors/'.$type.'.'.date('N').'.log';
+        
+        if(file_exists($error_file)){
+            if(filemtime($error_file)< strtotime(date('Y-m-d 00:00:00'))){
+                file_put_contents($error_file, 'Log file for '.date('Y-m-d')."\n====================\n\n");
+            }
+        }else file_put_contents($error_file, 'Log file for '.date('Y-m-d')."\n====================\n\n");
+        
+        file_put_contents($error_file, $message, FILE_APPEND);
     }
 }

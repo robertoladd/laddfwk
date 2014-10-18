@@ -32,7 +32,7 @@ class Application{
         }
         
         public static function setCLIFlags($flags){
-            if(!is_array($flags)) throw new laddException('Flags must be an array.', 1);
+            if(!is_array($flags)) throw new laddException('Flags must be an array.');
             
             self::$_flags = $flags;
         }

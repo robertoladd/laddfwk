@@ -20,6 +20,9 @@
 namespace Core;
 
 class laddException extends \Exception{
-    
-    
+
+    // representación de cadena personalizada del objeto
+    public function __toString() {
+        trigger_error($this->message."\n TRACE:\n".$this->getTraceAsString());
+    }
 }

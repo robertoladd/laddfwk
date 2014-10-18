@@ -17,7 +17,13 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-$CONFIG['debug']=3;
+$CONFIG['debug']=false;
+
+$CONFIG['error_logging']='both';//available email, file or both values. Leave empty for no logging.
+
+$CONFIG['error_logging_email']='testfwkerror@yopmail.com';//email used for error notifications. Only used when error_logging is email or both.
+
+$CONFIG['from_email'] = 'laddfwk <laddfwk@localhost>';//From address used for sending system emails.
 
 $CONFIG['wwwroot']='http://localhost';//without ending slash
 

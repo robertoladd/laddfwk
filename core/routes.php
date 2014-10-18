@@ -107,11 +107,11 @@ class Routes{
                 
                 $controller_name = "\\Controller\\".$route['controller'];
                 
-                if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.", 0);
+                if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.");
         
                 $controller = new $controller_name;
 
-                if(!method_exists($controller, $route['controller_method']))  throw new laddException("Unknown method {$route['controller_method']}.", 0);
+                if(!method_exists($controller, $route['controller_method']))  throw new laddException("Unknown method {$route['controller_method']}.");
                 
                 unset($matches[0]);
                 
@@ -125,7 +125,7 @@ class Routes{
     
     protected function dispatchCLI(){
         global $argv;
-        if(!ini_get('register_argc_argv')) throw new laddException('Disabled register_argc_argv ini parameter.', 0);
+        if(!ini_get('register_argc_argv')) throw new laddException('Disabled register_argc_argv ini parameter.');
         
         $cmd_flags = array();
         foreach($argv as $k => $v){
@@ -156,7 +156,7 @@ class Routes{
         }
         
         
-        if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.", 0);
+        if(!class_exists($controller_name))  throw new laddException("Unknown controller {$controller_name}.");
         
         $controller = new $controller_name;
         Application::setCLIFlags($cmd_flags);
