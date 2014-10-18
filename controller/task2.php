@@ -6,9 +6,12 @@ class Task2 extends \Core\Controller{
     
     protected $addresses = array();
     
-    public function address($id, $as_html=false){
+    public function address($id=false, $as_html=false){
         $id = $id-1;//human friendly id's
         
+        //this is to support original example's behavior
+        if(isset($_GET['id'])) $id = (int) $_GET['id'];
+            
         $this->loadAddresses();
         if(!isset($this->addresses[$id])){
             return $this->status404();
