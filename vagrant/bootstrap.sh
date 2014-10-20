@@ -38,3 +38,6 @@ mysql -uroot -proot -e "CREATE SCHEMA laddfwk DEFAULT CHARACTER SET utf8;"
 
 mysql -uroot -proot -e "CREATE TABLE laddfwk.addresses (  id int(11) NOT NULL AUTO_INCREMENT,  name varchar(45) DEFAULT NULL,  phone_number varchar(45) NOT NULL,  address varchar(255) DEFAULT NULL,  PRIMARY KEY (id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;"
 
+sudo cp /vagrant/tests/phpunit.phar /usr/local/bin/phpunit
+
+sudo chmod +x /usr/local/bin/phpunit

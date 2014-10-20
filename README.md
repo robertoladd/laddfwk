@@ -152,7 +152,6 @@ if(isset($address->id)){
 
 ##TODO
 
-* Unit tests
 * Template views
 * Multi-lang support
 * A real fullstack framework. :)

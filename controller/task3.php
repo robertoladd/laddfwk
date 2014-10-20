@@ -59,7 +59,7 @@ class Task3 extends \Core\Controller{
             if($as_html){
                 return $this->display('success_message', array('action'=>'Create'), 200);
             }else{
-                return $this->status201();
+                return $this->status201(json_encode($address));
             }
         }
         throw new \Core\laddException('Failed to save task3 resource');
@@ -93,7 +93,7 @@ class Task3 extends \Core\Controller{
             if($as_html){
                 return $this->display('success_message', array('action'=>'Update'), 200);
             }else{
-                return $this->status204();
+                return $this->status204(json_encode($address));
             }
         }
         throw new \Core\laddException('Failed to save task3 resource');
