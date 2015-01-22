@@ -7,15 +7,6 @@
  * 
  */
 
-$CONFIG['path'] = __DIR__.'/..';
-
-
-include_once($CONFIG['path'].'/config.php');
-
-if(file_exists($CONFIG['path'].'/config_overide/config.php')){
-	include_once($CONFIG['path'].'/config_overide/config.php');
-}
-
 
 class Task3Test extends PHPUnit_Framework_TestCase
 {
@@ -23,11 +14,10 @@ class Task3Test extends PHPUnit_Framework_TestCase
     
     public function testExpectEmptyAddresObject()
     {
-        global $CONFIG;
         
         
         $this->expectOutputString('{"id":null,"name":null,"phone_number":null,"address":null,"ts_created":null,"ts_updated":null}');
-        echo file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address/form');
+        echo file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address/form');
     }
     
     /**
@@ -37,9 +27,7 @@ class Task3Test extends PHPUnit_Framework_TestCase
     
     
     public function testExpectCURLCreate()
-    {
-        global $CONFIG;
-        
+    {   
         
         //creation
         
@@ -56,7 +44,7 @@ class Task3Test extends PHPUnit_Framework_TestCase
 
         $context = stream_context_create($options);
         
-        $address_str =  file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address', false, $context);
+        $address_str =  file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address', false, $context);
         $address = json_decode($address_str, true);
         
         $this->assertEquals(true, is_array($address));//Our recently created record must exist.
@@ -81,12 +69,11 @@ class Task3Test extends PHPUnit_Framework_TestCase
     
     public function testExpectCURLReadAll(array $address)
     {
-        global $CONFIG;
         
         $address_id = $address['id'];
         
         //read
-        $addresses =  file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address');
+        $addresses =  file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address');
         $addresses = json_decode($addresses, true);
         
         $this->assertEquals(true, (count($addresses)>0));//at least one record must exist.
@@ -111,7 +98,6 @@ class Task3Test extends PHPUnit_Framework_TestCase
     
     public function testExpectCURLUpdate(array $test_address)
     {
-        global $CONFIG;
         
         //update
 
@@ -130,7 +116,7 @@ class Task3Test extends PHPUnit_Framework_TestCase
 
         $context = stream_context_create($options);
         
-        $address_str =  file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address/'.$test_address['id'], false, $context);
+        $address_str =  file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address/'.$test_address['id'], false, $context);
         
         $address = json_decode($address_str, true);
         
@@ -149,9 +135,8 @@ class Task3Test extends PHPUnit_Framework_TestCase
     
     public function testExpectCURLReadOne(array $address)
     {
-        global $CONFIG;
         //read with index
-        $address_str =  file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address/'.$address['id']);
+        $address_str =  file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address/'.$address['id']);
         $addresses_updated = json_decode($address_str, true);
         
         $this->assertEquals($address, $addresses_updated);//Our recently updated matches our requested address.
@@ -166,7 +151,6 @@ class Task3Test extends PHPUnit_Framework_TestCase
     
     public function testExpectCURLDelete(array $addresses_updated)
     {
-        global $CONFIG;
     
         //delete
         $options = array(
@@ -179,10 +163,10 @@ class Task3Test extends PHPUnit_Framework_TestCase
         
         $this->expectOutputString('Done. No content.');
         
-        echo   file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address/'.$addresses_updated['id'], false, $context);
+        echo   file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address/'.$addresses_updated['id'], false, $context);
         
         //Verify that it really doesn't exist anymore
-        $this->assertEquals(false, @file_get_contents(str_replace('8080', '80', $CONFIG['wwwroot']).'/t3/address/'.$addresses_updated['id']));
+        $this->assertEquals('{}', @file_get_contents(str_replace('8080', '80', \Core\Config::get('wwwroot')).'/t3/address/'.$addresses_updated['id']));
         
         
     }

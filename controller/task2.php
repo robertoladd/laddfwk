@@ -2,6 +2,8 @@
 
 namespace Controller;
 
+use Core\Config as Config;
+
 class Task2 extends \Core\Controller{
     
     protected $addresses = array();
@@ -34,9 +36,8 @@ class Task2 extends \Core\Controller{
     }
     
     protected function loadAddresses(){
-        global $CONFIG;
         
-        $file = fopen($CONFIG['path'].'/storage/example.csv', 'r');
+        $file = fopen(Config::get('path').'/storage/example.csv', 'r');
         while (($line = fgetcsv($file)) !== FALSE) {
             $this->addresses[] = array(
                 'name' => $line[0],

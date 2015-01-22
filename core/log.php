@@ -23,7 +23,6 @@ namespace Core;
 class Log{
     
     public static function __callStatic($method,$arguments) {
-        global $CONFIG;
         
         if(method_exists('\\Core\\Log', $method)) {
             forward_static_call_array(array(self::NAME,$method),$arguments);
@@ -37,7 +36,7 @@ class Log{
                 echo $arguments[0]."\r";
             }
         }else{
-            switch($CONFIG['debug']){
+            switch(Config::get('debug')){
                 case 3:
                     if($method=='info') echo "\n".$arguments[0];
                 case 2:

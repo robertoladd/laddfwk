@@ -56,11 +56,10 @@ abstract class DBConnection{
     }
     
     public static function getInstance(){//this would allow master/slave connections
-        global $CONFIG;
         
         if(self::$_instance) return self::$_instance;
         else{
-            switch($CONFIG['db_driver']){
+            switch(Config::get('db_driver')){
                 case 'mysql':
                 default:
                     $driver =  'MySQLDB';
@@ -71,7 +70,7 @@ abstract class DBConnection{
                 throw new laddException("Attempt to initiate non existent db driver class {$driver}.");
             }
             
-            self::$_instance=new $driver($CONFIG['db_driver_config']);
+            self::$_instance=new $driver(Config::get('db_driver_config'));
             
             self::$_instance->connect();
             

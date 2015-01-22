@@ -19,11 +19,12 @@
 
 
 spl_autoload_register(function ($class) {
-    global $CONFIG;
+    $rootpath = __DIR__.'/../';
+    
     $parts = explode('\\', $class);
     foreach($parts as $k => $part){
         $parts[$k] = lcfirst($part);
     }
     $path = implode('/', $parts);
-    include $CONFIG['path'].'/'.$path . '.php';
+    include $rootpath.'/'.$path . '.php';
 });

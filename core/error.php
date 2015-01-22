@@ -23,9 +23,9 @@ class Error{
     static $_types = array(1024=>'Application Exception', 1=>'Error', 2 =>'Warning', 8 => 'Notice', 2048 => 'Strict');
     
     public static function handle($errno, $errstr, $errfile, $errline, $context){
-        global $CONFIG;
         
-        switch($CONFIG['error_logging']){
+        
+        switch(Config::get('error_logging')){
             case 'email':
                 self::email($errno, $errstr, $errfile, $errline, $context);
             break;    
@@ -40,7 +40,7 @@ class Error{
             break;
         }
         
-        if($CONFIG['debug']){
+        if(Config::get('debug')){
             $errstr = nl2br($errstr);
             $message = View::get('500', array('error'=>$errstr, 'file'=>$errfile, 'line'=>$errline, 'type'=>self::$_types[$errno]));
             $response = new Response($message, 500);
@@ -49,21 +49,19 @@ class Error{
     }
     
     public static function email($errno, $errstr, $errfile, $errline, $context){
-        global $CONFIG;
         
-        $subject = strtoupper(self::$_types[$errno])." at ({$CONFIG['wwwroot']})";
+        $subject = strtoupper(self::$_types[$errno])." at (".Config::get('wwwroot').")";
         $errstr = nl2br($errstr);
         $message = View::get('500', array('error'=>$errstr, 'file'=>$errfile, 'line'=>$errline, 'type'=>self::$_types[$errno]));
         
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-        $headers .= 'From: '.$CONFIG['from_email'] . "\r\n";
+        $headers .= 'From: '.Config::get('from_email') . "\r\n";
 
-        return mail($CONFIG['error_logging_email'], $subject, $message, $headers);
+        return mail(Config::get('error_logging_email'), $subject, $message, $headers);
     }
     
     public static function file($errno, $errstr, $errfile, $errline, $context){
-        global $CONFIG;
         
         $type = str_replace(' ', '_', strtolower(self::$_types[$errno]));
         $remote_addr = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'undefined');
@@ -72,7 +70,7 @@ class Error{
         $message = str_replace("\n", "\n\t", $message);
         
         //the day of the week is used as a simple log rotation method. Only the last 7 days will be available.
-        $error_file = $CONFIG['path'].'/logs/errors/'.$type.'.'.date('N').'.log';
+        $error_file = Config::get('path').'/logs/errors/'.$type.'.'.date('N').'.log';
         
         if(file_exists($error_file)){
             if(filemtime($error_file)< strtotime(date('Y-m-d 00:00:00'))){

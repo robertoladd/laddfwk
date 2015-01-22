@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit 
+    colors="true"
+    bootstrap="./core/autoload.php">
+    <testsuites>
+        <testsuite name="LaddFwk Tests">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -87,13 +87,12 @@ class Routes{
     }
     
     protected static function dispatchRoute($req_method){
-        global $CONFIG;
         
         if(!isset(self::$_routes[$req_method])) return false;
         
         if(!is_array(self::$_routes[$req_method])) return false;
         
-        $wwwroot_parts= parse_url($CONFIG['wwwroot']);
+        $wwwroot_parts= parse_url(Config::get('wwwroot'));
         
         if(isset($wwwroot_parts['path'])) $rel_url = str_replace($wwwroot_parts['path'], '', $_SERVER['REQUEST_URI']);
         else $rel_url = $_SERVER['REQUEST_URI'];
@@ -102,6 +101,7 @@ class Routes{
         
         foreach(self::$_routes[$req_method] as $route){
             $matches = array();
+            
             if(preg_match($route['path_pattern'], $rel_url, $matches)){
                 
                 Log::info("Route pattern matches: ".print_r($matches, true));
@@ -183,8 +183,8 @@ class Routes{
     }
     
     public static function loadRoutes(){
-        global $CONFIG;
-        include_once($CONFIG['path'].'/routes.php');
+        
+        include_once(Config::get('path').'/routes.php');
     }
     
     public static function add($path_pattern, $controller, $controller_method, $http_method = \Core\Routes::ANY){

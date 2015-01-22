@@ -16,23 +16,19 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-$CONFIG['debug']=false;
-
-$CONFIG['error_logging']='both';//available email, file or both values. Leave empty for no logging.
-
-$CONFIG['error_logging_email']='testfwkerror@yopmail.com';//email used for error notifications. Only used when error_logging is email or both.
-
-$CONFIG['from_email'] = 'laddfwk <laddfwk@localhost>';//From address used for sending system emails.
-
-$CONFIG['wwwroot']='http://localhost:8080';//without ending slash
-
-$CONFIG['db_driver']='mysql';
-
-$CONFIG['db_driver_config']=array(
-    'username' => 'root',
-    'password' => 'root',
-    'host' => 'localhost',
-    'port' => '3306',
-    'database' => 'laddfwk',
+return array(
+    'path'=>__DIR__,
+    'debug'=>false,
+    'error_logging'=>'both', //available email, file or both values. Leave empty for no logging.
+    'error_logging_email'=>'testfwkerror@yopmail.com', //email used for error notifications. Only used when error_logging is email or both.
+    'from_email'=>'laddfwk <laddfwk@localhost>', //From address used for sending system emails.
+    'wwwroot'=>'http://localhost:8080', //without ending slash
+    'db_driver'=>'mysql',
+    'db_driver_config'=>array(
+        'username' => 'root',
+        'password' => 'root',
+        'host' => 'localhost',
+        'port' => '3306',
+        'database' => 'laddfwk',
+    ),
 );

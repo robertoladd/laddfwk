@@ -17,18 +17,13 @@
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-$CONFIG['path'] = __DIR__;
+$rootpath = __DIR__;
 
 
-include_once($CONFIG['path'].'/config.php');
+require_once($rootpath.'/core/autoload.php');
 
-if(file_exists($CONFIG['path'].'/config_overide/config.php')){
-	include_once($CONFIG['path'].'/config_overide/config.php');
-}
 
-ini_set('display_errors', (bool) $CONFIG['debug']);
-
-include_once($CONFIG['path'].'/core/autoload.php');
+ini_set('display_errors', (bool) Core\Config::get('debug'));
 
 set_error_handler(array('\Core\Error', 'handle'));
 

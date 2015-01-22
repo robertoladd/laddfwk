@@ -16,14 +16,15 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+use \Core\Config;
 
 namespace Core;
+
+
 
 class View {
     
     public static function get($view, $params=array()){
-        global $CONFIG;
         
         if(\Core\Routes::getInterface()=='cli'){
             $view_file = self::getPath($view, 'cli');
@@ -59,9 +60,8 @@ class View {
     
     
     protected static function getPath($view, $sufix=''){
-        global $CONFIG;
         if($sufix)$sufix ='.'.$sufix;
-        return $CONFIG['path'].'/view/'.str_replace('.', '/', $view).$sufix.'.php';
+        return Config::get('path').'/view/'.str_replace('.', '/', $view).$sufix.'.php';
     }
     
     public static function exists($view, $sufix=''){
