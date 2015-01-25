@@ -41,7 +41,7 @@ class Controller{
         return $this->display('raw', $message, 404);
     }
     
-    protected function status200($message='OK'){
+     function status200($message='OK'){
         return $this->display('raw', $message, 200);
     }
     

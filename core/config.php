@@ -19,7 +19,7 @@ class Config{
     }
     
     
-    public static function initCheck(){
+    protected static function initCheck(){
         if(count(static::$parameters)==0){
             self::init();
         }

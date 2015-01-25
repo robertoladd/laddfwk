@@ -35,3 +35,7 @@ config_overide/config.php
 /logs/errors/strict.6.log
 /logs/errors/strict.2.log
 /logs/errors/strict.7.log
+/vendor/
+/composer.lock
+/composer.phar
+/tests/phpunit.phar.1

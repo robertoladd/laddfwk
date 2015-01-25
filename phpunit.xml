@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit 
-    colors="true"
-    bootstrap="./core/autoload.php">
+    colors="true">
     <testsuites>
         <testsuite name="LaddFwk Tests">
+            <directory>./tests/core</directory>
+        </testsuite>
+        <testsuite name="Sample application test">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

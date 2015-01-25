@@ -1,0 +1,12 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "4.4.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Core": "",
+            "Model": "",
+            "Controller": ""
+        }
+    }
+}
